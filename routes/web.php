@@ -87,3 +87,9 @@ Route::post('/payment/guardia-logout', function() {
 Route::post('/payment/paypal/success', [PaymentController::class, 'paypalSuccessJS'])->name('paypal.success.js');
 Route::get('/payment/paypal/success', [PaymentController::class, 'paypalSuccess'])->name('paypal.success');
 Route::get('/payment/paypal/cancel', [PaymentController::class, 'paypalCancel'])->name('paypal.cancel');
+
+// Rutas para suscripciones
+Route::middleware('auth:admin,guardia')->group(function () {
+    Route::get('/subscriptions', [PaymentController::class, 'showSubscriptions'])->name('subscriptions.index');
+    Route::get('/subscriptions/{subscription}', [PaymentController::class, 'showSubscription'])->name('subscriptions.show');
+});

@@ -75,4 +75,32 @@ class User extends Authenticatable
     {
         return $this->hasOne(Persona::class);
     }
+
+    /**
+     * Relación con Suscripciones
+     */
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    /**
+     * Obtener la suscripción activa
+     */
+    public function activeSubscription()
+    {
+        return $this->subscriptions()
+                   ->where('status', 'completed')
+                   ->where('subscription_end_date', '>=', Carbon::now())
+                   ->latest('subscription_end_date')
+                   ->first();
+    }
+
+    /**
+     * Verificar si tiene suscripción activa
+     */
+    public function hasActiveSubscription()
+    {
+        return $this->activeSubscription() !== null;
+    }
 }

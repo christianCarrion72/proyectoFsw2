@@ -67,6 +67,13 @@
                             Gestionar Guardias
                         </a>
 
+                        <!-- Añadir después de "Gestionar Guardias" -->
+                        <a class="nav-link" href="{{ route('subscriptions.index') }}">
+                            <div class="sb-nav-link-icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            Mis Suscripciones
+                        </a>
                         {{-- <a class="nav-link" href="{{ route('admin.transacciones') }}">
                             <div class="sb-nav-link-icon">
                                 <i class="fas fa-dollar-sign"></i>
