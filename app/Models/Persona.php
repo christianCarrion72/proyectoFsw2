@@ -18,11 +18,15 @@ class Persona extends Model
         'telefono',
         'foto',
         'user_id',
-
     ];
+
+    // Relación con User
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function scopeUser($query,$id){
       if (is_null($id)) { return $query; }else{ return $query->where('user_id',$id); }
     }
-
 }

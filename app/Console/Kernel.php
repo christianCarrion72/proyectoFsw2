@@ -12,7 +12,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        // Ejecutar el comando el último día de cada mes a las 23:59
+        $schedule->command('users:block-non-payment')
+                 ->monthlyOn(31, '23:59');
+                
+        // También ejecutar el primer día del mes por si el mes no tiene 31 días
+        $schedule->command('users:block-non-payment')
+                 ->monthlyOn(1, '00:01');
     }
 
     /**

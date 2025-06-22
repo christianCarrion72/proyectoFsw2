@@ -60,14 +60,14 @@
                             Ver informes de eventos
                         </a>
 
-                        {{-- <a class="nav-link" href="{{ route('admin.vendedores') }}">
+                        <a class="nav-link" href="{{ route('admin.guardias.index') }}">
                             <div class="sb-nav-link-icon">
                                 <i class="fas fa-book-open"></i>
                             </div>
-                            Vendedores
+                            Gestionar Guardias
                         </a>
 
-                        <a class="nav-link" href="{{ route('admin.transacciones') }}">
+                        {{-- <a class="nav-link" href="{{ route('admin.transacciones') }}">
                             <div class="sb-nav-link-icon">
                                 <i class="fas fa-dollar-sign"></i>
                             </div>
@@ -90,7 +90,7 @@
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid">
                     <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Taller de Grado 2023</div>
+                        <div class="text-muted">Copyright &copy; Ingenieria de Software 2</div>
                         <div>
                             <a href="#">Politica de privacidad</a>
                             &middot;

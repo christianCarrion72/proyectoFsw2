@@ -7,38 +7,72 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'payment_status',
+        'last_payment_date',
+        'next_payment_due',
+        'monthly_fee',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'payment_status' => 'boolean',
+        'last_payment_date' => 'date',
+        'next_payment_due' => 'date',
+        'monthly_fee' => 'decimal:2',
     ];
+
+    /**
+     * Verificar si el usuario tiene el pago al día
+     */
+    public function hasValidPayment(): bool
+    {
+        return $this->payment_status && 
+               ($this->next_payment_due === null || $this->next_payment_due->isFuture());
+    }
+
+    /**
+     * Marcar como bloqueado por falta de pago
+     */
+    public function blockForNonPayment(): void
+    {
+        $this->update([
+            'payment_status' => false,
+            'next_payment_due' => Carbon::now()->addMonth()
+        ]);
+    }
+
+    /**
+     * Procesar pago y desbloquear
+     */
+    public function processPayment(): void
+    {
+        $this->update([
+            'payment_status' => true,
+            'last_payment_date' => Carbon::now(),
+            'next_payment_due' => Carbon::now()->addMonth()
+        ]);
+    }
+
+    /**
+     * Relación con Persona
+     */
+    public function persona()
+    {
+        return $this->hasOne(Persona::class);
+    }
 }

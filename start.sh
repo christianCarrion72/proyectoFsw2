@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Wait for MySQL to be ready
-/usr/bin/wait-for-it.sh db:3306 --timeout=60 --strict
+# Wait for PostgreSQL to be ready
+/usr/bin/wait-for-it.sh db:5432 --timeout=60 --strict
 
 # Run database migrations
 php artisan migrate --force

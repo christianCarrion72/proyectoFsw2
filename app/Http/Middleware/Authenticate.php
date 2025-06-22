@@ -12,6 +12,17 @@ class Authenticate extends Middleware
      */
     protected function redirectTo(Request $request): ?string
     {
+        // Verificar si es una ruta de admin
+        if ($request->is('admin/*')) {
+            return route('admin.login.view');
+        }
+        
+        // Verificar si es una ruta de guardia
+        if ($request->is('guardia/*')) {
+            return route('guardia.login.view');
+        }
+        
+        // Por defecto, redirigir a welcome
         return $request->expectsJson() ? null : route('welcome');
     }
 }
