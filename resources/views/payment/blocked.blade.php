@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Acceso Bloqueado - Pago Requerido</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -194,14 +195,52 @@
                     <div class="row">
                         <!-- Opción Tarjeta de Crédito -->
                         <div class="col-md-4">
-                            <form action="{{ route('payment.process.card') }}" method="POST">
+                            <div class="payment-option card-option" onclick="showCardPayment()">
+                                <i class="fas fa-credit-card"></i>
+                                <h5>Tarjeta de Crédito</h5>
+                                <p class="text-muted">Visa, MasterCard, American Express</p>
+                                <small class="text-success">Procesamiento inmediato</small>
+                            </div>
+                        </div>
+                        
+                        <!-- Formulario de Pago con Tarjeta (inicialmente oculto) -->
+                        <div id="cardPaymentForm" class="card-payment-form" style="display: none; margin-top: 20px;">
+                            <h5><i class="fas fa-credit-card"></i> Pago con Tarjeta de Crédito</h5>
+                            
+                            <form id="stripeForm">
                                 @csrf
-                                <div class="payment-option card-option" onclick="this.closest('form').submit()">
-                                    <i class="fas fa-credit-card"></i>
-                                    <h5>Tarjeta de Crédito</h5>
-                                    <p class="text-muted">Visa, MasterCard, American Express</p>
-                                    <small class="text-success">Procesamiento inmediato</small>
+                                <div class="mb-3">
+                                    <label class="form-label">Monto a pagar:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" id="cardAmount" class="form-control" value="{{ $monthlyFee }}" readonly>
+                                        <span class="input-group-text">USD</span>
+                                    </div>
                                 </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Email:</label>
+                                    <input type="email" id="cardEmail" class="form-control" value="{{ $user->email }}" readonly>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Información de la tarjeta:</label>
+                                    <div id="card-element" class="form-control" style="height: 40px; padding: 10px;">
+                                        <!-- Stripe Elements se insertará aquí -->
+                                    </div>
+                                    <div id="card-errors" role="alert" class="text-danger mt-2"></div>
+                                </div>
+                                
+                                <div class="d-flex gap-2">
+                                    <button id="submitCardPayment" class="btn btn-success" type="button">
+                                        <i class="fas fa-credit-card"></i> Procesar Pago
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="hideCardPayment()">
+                                        Cancelar
+                                    </button>
+                                </div>
+                                
+                                <div id="cardPaymentStatus" class="mt-3"></div>
                             </form>
                         </div>
                         
@@ -303,5 +342,25 @@
     
     <!-- Script externo -->
     <script src="{{ asset('scripts/crypto-payment.js') }}"></script>
+    <!-- Stripe JS -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        // Configurar Stripe con la clave pública
+        window.STRIPE_KEY = '{{ env("STRIPE_KEY") }}';
+    </script>
+    <script src="{{ asset('scripts/stripe-payment.js') }}"></script>
+    
+    <style>
+    .card-payment-form {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
+    }
+    
+    #card-element {
+        background: white;
+    }
+    </style>
 </body>
 </html>
