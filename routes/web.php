@@ -83,7 +83,7 @@ Route::post('/payment/guardia-logout', function() {
     return redirect()->route('welcome');
 })->name('payment.guardia.logout');
 
-// ELIMINAR estas líneas duplicadas:
-// Route::middleware(['auth'])->group(function () {
-//     Route::post('/payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');
-// });
+// Rutas para PayPal
+Route::post('/payment/paypal/success', [PaymentController::class, 'paypalSuccessJS'])->name('paypal.success.js');
+Route::get('/payment/paypal/success', [PaymentController::class, 'paypalSuccess'])->name('paypal.success');
+Route::get('/payment/paypal/cancel', [PaymentController::class, 'paypalCancel'])->name('paypal.cancel');

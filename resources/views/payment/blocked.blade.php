@@ -246,15 +246,31 @@
                         
                         <!-- Opción PayPal -->
                         <div class="col-md-4">
-                            <form action="{{ route('payment.process.paypal') }}" method="POST">
-                                @csrf
-                                <div class="payment-option paypal-option" onclick="this.closest('form').submit()">
-                                    <i class="fab fa-paypal"></i>
-                                    <h5>PayPal</h5>
-                                    <p class="text-muted">Pago seguro con tu cuenta PayPal</p>
-                                    <small class="text-success">Rápido y seguro</small>
-                                </div>
-                            </form>
+                            <div class="payment-option paypal-option" onclick="showPayPalPayment()">
+                                <i class="fab fa-paypal"></i>
+                                <h5>PayPal</h5>
+                                <p class="text-muted">Pago seguro con tu cuenta PayPal</p>
+                                <small class="text-success">Rápido y seguro</small>
+                            </div>
+                        </div>
+                        
+                        <!-- Formulario de Pago PayPal (inicialmente oculto) -->
+                        <div id="paypalPaymentForm" class="paypal-payment-form" style="display: none;">
+                            <h6><i class="fab fa-paypal me-2"></i>Pago con PayPal</h6>
+                            
+                            <div class="payment-info mb-3">
+                                <strong>Monto a pagar:</strong> $10.00 USD<br>
+                                <small class="text-muted">Acceso Premium RDS</small>
+                            </div>
+                            
+                            <!-- Contenedor para el botón de PayPal -->
+                            <div id="paypal-button-container"></div>
+                            
+                            <div id="paypalPaymentStatus" class="mt-3"></div>
+                            
+                            <button type="button" class="btn btn-secondary mt-3" onclick="hidePayPalPayment()">
+                                <i class="fas fa-arrow-left"></i> Volver
+                            </button>
                         </div>
                         
                         <!-- Opción Criptomonedas -->
@@ -335,13 +351,18 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id={{ config('paypal.client_id') }}&currency=USD"></script>
+    
     <!-- Variable global para el script -->
     <script>
         window.RECEIVING_ADDRESS = '{{ env('CRYPTO_WALLET_ADDRESS', '0x742d35Cc6634C0532925a3b8D4C9db96590c6C87') }}';
     </script>
     
-    <!-- Script externo -->
+    <!-- Scripts de pago -->
     <script src="{{ asset('scripts/crypto-payment.js') }}"></script>
+    <script src="{{ asset('scripts/paypal-payment.js') }}"></script>
+    
     <!-- Stripe JS -->
     <script src="https://js.stripe.com/v3/"></script>
     <script>

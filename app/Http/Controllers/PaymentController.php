@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Stripe\Stripe;
@@ -13,6 +14,18 @@ use Stripe\Exception\InvalidRequestException;
 use Stripe\Exception\AuthenticationException;
 use Stripe\Exception\ApiConnectionException;
 use Stripe\Exception\ApiErrorException;
+use PayPal\Rest\ApiContext;
+use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Api\Amount;
+use PayPal\Api\Details;
+use PayPal\Api\Item;
+use PayPal\Api\ItemList;
+use PayPal\Api\Payer;
+use PayPal\Api\Payment;
+use PayPal\Api\PaymentExecution;
+use PayPal\Api\RedirectUrls;
+use PayPal\Api\Transaction;
+use PayPal\Exception\PayPalConnectionException;
 
 class PaymentController extends Controller
 {
@@ -283,31 +296,227 @@ class PaymentController extends Controller
     }
 
     /**
-     * Procesar pago con PayPal
+     * Manejar el éxito del pago de PayPal (llamada AJAX desde JavaScript)
      */
-    public function processPayPalPayment(Request $request)
+    public function paypalSuccessJS(Request $request)
     {
-        $user = $this->getAuthenticatedUser();
-        $redirectRoute = $this->getRedirectRoute();
-        
-        if (!$user) {
-            return redirect()->route('payment.blocked')
-                ->with('error', 'No se pudo encontrar el usuario asociado');
-        }
-
         try {
-            // Aquí implementarías la lógica de pago con PayPal
-            // Por ejemplo, integración con PayPal SDK
+            Log::info('=== PAYPAL SUCCESS JS EJECUTADO ===', [
+                'request_data' => $request->all(),
+                'method' => $request->method()
+            ]);
             
-            // Simulación de procesamiento
+            $user = $this->getAuthenticatedUser();
+            $redirectRoute = $this->getRedirectRoute();
+            
+            if (!$user) {
+                Log::error('Usuario no encontrado en paypalSuccessJS');
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No se pudo encontrar el usuario asociado'
+                ], 401);
+            }
+            
+            // Validar que recibimos los datos necesarios de PayPal
+            $request->validate([
+                'orderID' => 'required|string',
+                'payerID' => 'required|string',
+                'details' => 'required|array'
+            ]);
+            
+            // Actualizar el estado del usuario
             $this->updatePaymentStatus($user);
             
-            return redirect()->route($redirectRoute)
-                ->with('success', 'Pago con PayPal procesado exitosamente. Gracias por usar PayPal.');
-                
+            // Guardar información de la transacción PayPal
+            $this->savePayPalTransaction($user, $request);
+            
+            Log::info('Pago PayPal exitoso via JS:', [
+                'user_id' => $user->id,
+                'order_id' => $request->orderID,
+                'payer_id' => $request->payerID
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Pago procesado exitosamente',
+                'redirect_url' => route($redirectRoute)
+            ]);
+            
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validación fallida en paypalSuccessJS:', [
+                'errors' => $e->errors()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Datos de PayPal inválidos',
+                'errors' => $e->errors()
+            ], 422);
+            
         } catch (\Exception $e) {
+            Log::error('Error en paypalSuccessJS:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al procesar el pago: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Manejar el éxito del pago de PayPal (redirección tradicional)
+     */
+    public function paypalSuccess(Request $request)
+    {
+        try {
+            Log::info('=== PAYPAL SUCCESS TRADICIONAL ===', [
+                'request_data' => $request->all()
+            ]);
+            
+            $paymentId = $request->get('paymentId');
+            $payerId = $request->get('PayerID');
+            
+            if (!$paymentId || !$payerId) {
+                Log::error('Faltan parámetros de PayPal', [
+                    'paymentId' => $paymentId,
+                    'payerId' => $payerId
+                ]);
+                return redirect()->route('payment.blocked')
+                    ->with('error', 'Datos de pago incompletos');
+            }
+            
+            // Obtener datos de la sesión
+            $sessionPaymentId = session('paypal_payment_id');
+            $sessionUserId = session('paypal_user_id');
+            
+            if ($paymentId !== $sessionPaymentId) {
+                Log::error('ID de pago no coincide', [
+                    'received' => $paymentId,
+                    'session' => $sessionPaymentId
+                ]);
+                return redirect()->route('payment.blocked')
+                    ->with('error', 'Error de verificación de pago');
+            }
+            
+            $user = $this->getUserById($sessionUserId);
+            if (!$user) {
+                Log::error('Usuario no encontrado', ['user_id' => $sessionUserId]);
+                return redirect()->route('payment.blocked')
+                    ->with('error', 'Usuario no encontrado');
+            }
+            
+            // Configurar PayPal API
+            $apiContext = new ApiContext(
+                new OAuthTokenCredential(
+                    config('paypal.client_id'),
+                    config('paypal.secret')
+                )
+            );
+            
+            $apiContext->setConfig([
+                'mode' => env('PAYPAL_MODE', 'sandbox')
+            ]);
+            
+            // Ejecutar el pago
+            $payment = Payment::get($paymentId, $apiContext);
+            $execution = new PaymentExecution();
+            $execution->setPayerId($payerId);
+            
+            $result = $payment->execute($execution, $apiContext);
+            
+            if ($result->getState() === 'approved') {
+                // Actualizar estado del usuario
+                $this->updatePaymentStatus($user);
+                
+                // Limpiar sesión
+                session()->forget(['paypal_payment_id', 'paypal_user_id']);
+                
+                Log::info('Pago PayPal completado exitosamente', [
+                    'payment_id' => $paymentId,
+                    'user_id' => $user->id
+                ]);
+                
+                $redirectRoute = $this->getRedirectRouteForUser($user);
+                return redirect()->route($redirectRoute)
+                    ->with('success', 'Pago procesado exitosamente');
+            } else {
+                return redirect()->route('payment.blocked')
+                    ->with('error', 'El pago no fue aprobado');
+            }
+            
+        } catch (\Exception $e) {
+            Log::error('Error en paypalSuccess:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
             return redirect()->route('payment.blocked')
-                ->with('error', 'Error al procesar el pago con PayPal: ' . $e->getMessage());
+                ->with('error', 'Error al procesar el pago: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Guardar información de la transacción PayPal
+     */
+    private function savePayPalTransaction($user, $request)
+    {
+        Log::info('Transacción PayPal exitosa', [
+            'user_id' => $user->id,
+            'order_id' => $request->orderID ?? 'N/A',
+            'payer_id' => $request->payerID ?? 'N/A',
+            'amount' => '10.00',
+            'currency' => 'USD',
+            'payment_method' => 'paypal',
+            'transaction_details' => $request->details ?? [],
+            'timestamp' => now()
+        ]);
+    }
+
+    /**
+     * Obtener usuario por ID (método auxiliar mejorado)
+     */
+    private function getUserById($userId)
+    {
+        try {
+            // Buscar en tabla de administradores
+            if ($admin = \App\Models\Administrador::find($userId)) {
+                return $admin->persona->user ?? null;
+            }
+            
+            // Buscar en tabla de guardias
+            if ($guardia = \App\Models\Guardia::find($userId)) {
+                return $guardia->persona->user ?? null;
+            }
+            
+            // Buscar en tabla de usuarios directamente
+            if ($user = \App\Models\User::find($userId)) {
+                return $user;
+            }
+            
+            return null;
+            
+        } catch (\Exception $e) {
+            Log::error('Error buscando usuario:', [
+                'user_id' => $userId,
+                'error' => $e->getMessage()
+            ]);
+            return null;
+        }
+    }
+    /**
+     * Obtener ruta de redirección para un usuario específico
+     */
+    private function getRedirectRouteForUser($user)
+    {
+        if ($user instanceof \App\Models\Administrador) {
+            return 'admin.dashboard';
+        } elseif ($user instanceof \App\Models\Guardia) {
+            return 'guardia.dashboard';
+        } else {
+            return 'dashboard';
         }
     }
 
