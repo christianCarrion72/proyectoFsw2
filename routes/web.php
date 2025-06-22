@@ -54,10 +54,23 @@ Route::prefix('guardia')->group(function () {
 // Rutas de pago - SIN middleware auth para la vista blocked
 Route::get('/payment/blocked', [PaymentController::class, 'blocked'])->name('payment.blocked');
 
-// Ruta de procesamiento de pago - CON middleware para múltiples guards
+// Rutas de procesamiento de pago - CON middleware para múltiples guards
 Route::post('/payment/process', [PaymentController::class, 'processPayment'])
     ->middleware(['auth:admin,guardia,web'])
     ->name('payment.process');
+
+// Nuevas rutas para los diferentes métodos de pago
+Route::post('/payment/process/card', [PaymentController::class, 'processCardPayment'])
+    ->middleware(['auth:admin,guardia,web'])
+    ->name('payment.process.card');
+
+Route::post('/payment/process/paypal', [PaymentController::class, 'processPayPalPayment'])
+    ->middleware(['auth:admin,guardia,web'])
+    ->name('payment.process.paypal');
+
+Route::post('/payment/process/crypto', [PaymentController::class, 'processCryptoPayment'])
+    ->middleware(['auth:admin,guardia,web'])
+    ->name('payment.process.crypto');
 
 // Rutas específicas para logout desde payment blocked
 Route::post('/payment/admin-logout', function() {
