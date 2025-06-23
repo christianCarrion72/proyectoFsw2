@@ -1,0 +1,22 @@
+{
+  "total_incidents": 150,
+  "monthly_incidents": 16,
+  "monthly_change_percent": -36.0,
+  "resolution_rate": 59.3,
+  "avg_resolution_time": 14.1,
+  "type_distribution": {
+    "Physical": 26.0,
+    "Verbal": 46.7,
+    "Cyberbullying": 22.0,
+    "Social Exclusion": 5.3
+  },
+  "monthly_data": {
+    "2025-02": 22,
+    "2025-04": 23,
+    "2025-03": 37,
+    "2025-05": 25,
+    "2025-01": 21,
+    "2024-12": 6,
+    "2025-06": 16
+  }
+}

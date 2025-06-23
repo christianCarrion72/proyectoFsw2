@@ -1,0 +1,151 @@
+id,date,time,type,severity,location,status,reported_by,age_group,resolved_days
+1,2025-02-06,12:19,Physical,3,Bathroom,Resolved,Teacher,15-18,4
+2,2025-04-10,14:03,Verbal,4,Bathroom,Resolved,Staff,9-11,12
+3,2025-03-31,13:57,Physical,3,Classroom,Reported,Anonymous,6-8,
+4,2025-02-03,13:32,Physical,5,School Bus,In Progress,Parent,9-11,
+5,2025-05-06,11:05,Verbal,4,Playground,In Progress,Teacher,12-14,
+6,2025-01-08,09:44,Verbal,4,Hallway,Resolved,Teacher,6-8,2
+7,2025-03-28,13:31,Verbal,3,Hallway,Resolved,Staff,6-8,22
+8,2024-12-26,12:52,Cyberbullying,4,Playground,Resolved,Staff,6-8,28
+9,2025-05-18,13:06,Verbal,3,Classroom,Resolved,Staff,6-8,29
+10,2025-03-13,15:40,Physical,3,Cafeteria,Resolved,Student,9-11,14
+11,2025-01-26,11:10,Verbal,3,Cafeteria,In Progress,Parent,12-14,
+12,2025-06-14,12:31,Verbal,3,Bathroom,In Progress,Parent,15-18,
+13,2025-01-29,13:36,Verbal,2,School Bus,Resolved,Student,15-18,9
+14,2025-01-16,12:16,Cyberbullying,3,Playground,Reported,Parent,12-14,
+15,2025-04-29,12:55,Verbal,4,Bathroom,Resolved,Staff,12-14,11
+16,2025-06-04,14:46,Verbal,5,Hallway,Under Investigation,Anonymous,15-18,
+17,2024-12-26,12:19,Verbal,4,Classroom,In Progress,Student,15-18,
+18,2025-03-07,11:06,Cyberbullying,4,Playground,In Progress,Student,12-14,
+19,2025-05-07,15:00,Cyberbullying,4,Playground,In Progress,Parent,15-18,
+20,2025-06-16,11:32,Cyberbullying,3,Cafeteria,Resolved,Staff,15-18,17
+21,2025-03-20,12:15,Physical,3,Classroom,In Progress,Anonymous,9-11,
+22,2025-03-03,13:14,Verbal,4,Online/Social Media,Resolved,Staff,6-8,21
+23,2025-03-17,11:09,Cyberbullying,3,Bathroom,In Progress,Parent,6-8,
+24,2025-04-13,11:32,Verbal,4,Library,Resolved,Staff,12-14,19
+25,2025-04-07,13:07,Cyberbullying,4,Hallway,Resolved,Student,15-18,25
+26,2025-05-10,13:54,Cyberbullying,4,Cafeteria,Resolved,Staff,12-14,6
+27,2025-02-16,15:55,Verbal,2,Playground,Resolved,Staff,15-18,28
+28,2025-04-24,14:03,Social Exclusion,4,Cafeteria,In Progress,Staff,6-8,
+29,2025-04-03,13:07,Verbal,4,School Bus,Resolved,Anonymous,6-8,2
+30,2025-05-08,10:16,Physical,4,Bathroom,Under Investigation,Teacher,15-18,
+31,2025-03-06,09:35,Physical,2,Hallway,Resolved,Teacher,9-11,13
+32,2025-06-04,13:01,Physical,3,Playground,Resolved,Parent,12-14,10
+33,2025-03-26,10:00,Verbal,3,Online/Social Media,Resolved,Anonymous,6-8,29
+34,2025-02-02,13:15,Verbal,3,Cafeteria,Resolved,Parent,9-11,30
+35,2025-01-23,13:09,Verbal,3,Bathroom,Resolved,Parent,9-11,6
+36,2025-03-28,15:38,Verbal,4,Bathroom,Under Investigation,Teacher,6-8,
+37,2025-03-14,11:59,Social Exclusion,4,Classroom,Resolved,Parent,9-11,8
+38,2025-04-21,10:06,Cyberbullying,4,Library,In Progress,Student,6-8,
+39,2025-04-04,08:38,Verbal,3,Classroom,Resolved,Staff,9-11,13
+40,2025-04-23,13:39,Verbal,5,Hallway,Resolved,Student,9-11,9
+41,2025-02-16,12:50,Physical,4,Bathroom,Resolved,Staff,9-11,15
+42,2025-05-30,09:28,Physical,4,Playground,Resolved,Parent,6-8,3
+43,2025-01-10,11:27,Physical,4,Library,Resolved,Teacher,15-18,16
+44,2025-04-30,12:44,Verbal,3,Bathroom,Resolved,Anonymous,12-14,13
+45,2025-06-15,11:16,Verbal,3,Playground,In Progress,Parent,12-14,
+46,2025-02-28,12:22,Verbal,1,Hallway,Resolved,Student,9-11,2
+47,2025-02-25,10:57,Cyberbullying,4,Library,In Progress,Teacher,6-8,
+48,2025-01-07,12:19,Physical,4,Hallway,Resolved,Parent,6-8,14
+49,2025-03-19,12:00,Cyberbullying,5,Classroom,Resolved,Parent,15-18,16
+50,2025-03-05,08:16,Verbal,4,Online/Social Media,Resolved,Anonymous,12-14,7
+51,2025-06-18,11:20,Verbal,5,Playground,In Progress,Parent,6-8,
+52,2025-01-23,12:26,Verbal,3,School Bus,Resolved,Teacher,6-8,30
+53,2025-04-03,11:43,Verbal,1,Library,Resolved,Staff,6-8,7
+54,2025-03-03,11:54,Physical,5,School Bus,Resolved,Staff,9-11,27
+55,2025-02-15,10:05,Verbal,5,Playground,Under Investigation,Parent,15-18,
+56,2025-03-20,13:46,Verbal,3,Bathroom,In Progress,Student,9-11,
+57,2025-05-07,09:24,Verbal,4,Classroom,Under Investigation,Staff,12-14,
+58,2025-03-21,13:06,Physical,5,Cafeteria,In Progress,Anonymous,6-8,
+59,2025-03-24,09:26,Physical,3,Bathroom,In Progress,Student,15-18,
+60,2025-04-21,12:32,Physical,4,School Bus,Resolved,Parent,15-18,12
+61,2025-03-05,11:23,Cyberbullying,3,Playground,Resolved,Staff,12-14,20
+62,2025-03-22,14:03,Physical,3,Classroom,Under Investigation,Teacher,15-18,
+63,2025-05-04,13:34,Cyberbullying,3,Bathroom,Resolved,Parent,6-8,16
+64,2025-03-17,15:36,Verbal,4,Cafeteria,Resolved,Student,15-18,17
+65,2025-02-16,14:25,Cyberbullying,4,Hallway,Resolved,Teacher,6-8,5
+66,2025-01-07,14:06,Verbal,4,Playground,Resolved,Teacher,15-18,24
+67,2025-05-06,12:13,Social Exclusion,4,Classroom,In Progress,Teacher,15-18,
+68,2025-06-08,11:09,Verbal,5,Hallway,Reported,Student,6-8,
+69,2025-01-25,12:11,Verbal,5,Cafeteria,Under Investigation,Student,15-18,
+70,2025-06-03,14:33,Physical,4,Library,Under Investigation,Teacher,12-14,
+71,2025-06-05,14:25,Verbal,3,Hallway,Reported,Parent,12-14,
+72,2025-02-10,12:05,Verbal,3,Classroom,Under Investigation,Parent,12-14,
+73,2025-06-21,12:28,Verbal,3,Playground,Resolved,Staff,12-14,17
+74,2025-03-03,10:53,Verbal,4,School Bus,Resolved,Student,6-8,5
+75,2025-02-07,12:32,Verbal,3,Hallway,Resolved,Parent,12-14,27
+76,2025-01-09,12:59,Physical,3,School Bus,In Progress,Staff,12-14,
+77,2025-04-09,14:31,Verbal,4,Hallway,Resolved,Teacher,9-11,8
+78,2025-05-18,12:17,Physical,3,Library,In Progress,Staff,9-11,
+79,2025-05-31,14:14,Verbal,3,School Bus,Resolved,Anonymous,6-8,19
+80,2025-01-22,11:05,Physical,4,Cafeteria,In Progress,Anonymous,6-8,
+81,2025-03-13,11:48,Physical,3,Playground,Reported,Staff,12-14,
+82,2025-02-07,12:12,Social Exclusion,4,Cafeteria,Resolved,Parent,15-18,18
+83,2025-05-02,10:02,Verbal,2,Playground,Resolved,Parent,12-14,14
+84,2025-04-22,15:23,Physical,3,Playground,Resolved,Parent,6-8,1
+85,2025-05-02,14:24,Social Exclusion,3,Playground,Resolved,Parent,9-11,11
+86,2025-01-27,11:57,Cyberbullying,4,Classroom,Resolved,Student,12-14,5
+87,2025-03-08,12:15,Cyberbullying,3,Bathroom,In Progress,Anonymous,6-8,
+88,2025-02-25,13:59,Physical,3,Cafeteria,Resolved,Teacher,6-8,7
+89,2025-03-13,11:06,Verbal,3,Library,Reported,Staff,9-11,
+90,2025-04-26,09:52,Physical,5,Online/Social Media,Resolved,Anonymous,9-11,28
+91,2025-03-18,14:54,Cyberbullying,3,Online/Social Media,Resolved,Student,12-14,16
+92,2025-05-20,12:30,Cyberbullying,3,Cafeteria,Under Investigation,Parent,6-8,
+93,2025-06-12,11:36,Physical,5,Bathroom,In Progress,Parent,6-8,
+94,2025-02-05,14:33,Verbal,4,Online/Social Media,Resolved,Anonymous,9-11,11
+95,2025-03-03,11:00,Verbal,4,School Bus,Under Investigation,Staff,15-18,
+96,2025-04-30,13:16,Verbal,5,School Bus,Resolved,Anonymous,9-11,22
+97,2025-05-03,14:01,Cyberbullying,1,Classroom,Resolved,Student,15-18,19
+98,2025-05-08,12:05,Social Exclusion,3,Hallway,Under Investigation,Parent,6-8,
+99,2024-12-27,13:20,Verbal,4,Hallway,Under Investigation,Parent,12-14,
+100,2025-01-21,08:59,Physical,3,Library,Reported,Teacher,15-18,
+101,2025-04-21,12:26,Verbal,3,Online/Social Media,In Progress,Teacher,12-14,
+102,2025-02-19,11:57,Physical,3,Cafeteria,Resolved,Student,15-18,4
+103,2025-03-05,09:43,Cyberbullying,2,Cafeteria,Resolved,Anonymous,12-14,2
+104,2025-02-06,10:48,Cyberbullying,5,Hallway,Resolved,Staff,12-14,20
+105,2025-02-04,13:04,Verbal,3,Bathroom,Resolved,Teacher,15-18,15
+106,2025-04-02,10:44,Cyberbullying,4,Online/Social Media,Resolved,Student,9-11,6
+107,2025-01-19,13:02,Physical,1,Online/Social Media,Resolved,Teacher,15-18,10
+108,2025-03-10,13:46,Physical,2,Cafeteria,Resolved,Parent,12-14,7
+109,2025-05-27,13:38,Physical,2,Playground,Resolved,Parent,9-11,18
+110,2025-03-05,09:45,Cyberbullying,5,School Bus,In Progress,Student,15-18,
+111,2025-02-12,15:59,Cyberbullying,4,School Bus,Resolved,Anonymous,12-14,21
+112,2025-06-16,13:22,Verbal,2,Classroom,Resolved,Anonymous,15-18,1
+113,2025-05-15,10:26,Verbal,3,Classroom,Resolved,Parent,12-14,27
+114,2025-02-25,13:15,Cyberbullying,3,Hallway,Resolved,Anonymous,6-8,11
+115,2025-05-26,13:54,Cyberbullying,4,Library,Resolved,Parent,9-11,4
+116,2025-03-17,12:53,Cyberbullying,4,Playground,Resolved,Parent,12-14,24
+117,2024-12-31,12:43,Verbal,4,School Bus,Resolved,Staff,15-18,9
+118,2025-03-20,08:34,Cyberbullying,4,Library,Resolved,Anonymous,6-8,26
+119,2024-12-25,10:10,Verbal,3,School Bus,Reported,Anonymous,12-14,
+120,2025-04-03,13:08,Verbal,4,Online/Social Media,Reported,Teacher,12-14,
+121,2025-01-11,10:39,Cyberbullying,4,Playground,Resolved,Anonymous,6-8,20
+122,2024-12-30,12:11,Physical,3,Library,In Progress,Parent,6-8,
+123,2025-02-09,10:43,Verbal,3,Hallway,Reported,Teacher,12-14,
+124,2025-05-19,13:41,Verbal,2,Bathroom,Resolved,Staff,12-14,30
+125,2025-02-28,13:34,Verbal,2,Hallway,Reported,Teacher,15-18,
+126,2025-01-18,14:46,Physical,2,Online/Social Media,Resolved,Anonymous,9-11,8
+127,2025-03-24,09:30,Verbal,3,Playground,Under Investigation,Anonymous,15-18,
+128,2025-03-19,13:51,Social Exclusion,2,Playground,In Progress,Anonymous,15-18,
+129,2025-04-13,09:14,Verbal,3,Bathroom,Resolved,Anonymous,12-14,13
+130,2025-03-09,11:12,Verbal,4,Online/Social Media,In Progress,Staff,12-14,
+131,2025-06-19,12:23,Verbal,4,Hallway,Resolved,Student,12-14,11
+132,2025-06-04,15:40,Cyberbullying,4,Bathroom,Resolved,Anonymous,12-14,4
+133,2025-04-17,10:51,Physical,5,Cafeteria,Resolved,Parent,15-18,12
+134,2025-03-15,13:09,Physical,5,School Bus,In Progress,Anonymous,15-18,
+135,2025-04-27,15:28,Social Exclusion,4,School Bus,Reported,Teacher,6-8,
+136,2025-05-01,13:56,Cyberbullying,2,Hallway,In Progress,Teacher,12-14,
+137,2025-01-01,13:37,Verbal,5,Hallway,Resolved,Parent,6-8,19
+138,2025-01-15,12:14,Cyberbullying,4,Classroom,Resolved,Student,9-11,2
+139,2025-03-19,12:02,Verbal,3,Bathroom,Resolved,Student,12-14,7
+140,2025-05-18,14:07,Physical,2,Playground,In Progress,Parent,9-11,
+141,2025-05-01,13:45,Verbal,3,Hallway,In Progress,Parent,9-11,
+142,2025-01-17,13:18,Physical,3,Cafeteria,Resolved,Student,9-11,15
+143,2025-05-02,09:54,Physical,5,Hallway,Resolved,Anonymous,9-11,18
+144,2025-06-15,11:23,Verbal,4,Library,Resolved,Parent,15-18,3
+145,2025-02-05,12:35,Verbal,3,Playground,Resolved,Anonymous,15-18,9
+146,2025-03-30,10:40,Verbal,5,Library,In Progress,Student,12-14,
+147,2025-01-22,12:57,Physical,4,Online/Social Media,In Progress,Anonymous,15-18,
+148,2025-05-01,11:53,Verbal,2,Online/Social Media,Resolved,Teacher,12-14,19
+149,2025-04-22,15:35,Cyberbullying,3,Classroom,In Progress,Anonymous,9-11,
+150,2025-06-06,14:24,Verbal,3,Library,Resolved,Staff,6-8,22

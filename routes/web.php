@@ -8,7 +8,9 @@ use App\Http\Controllers\Web\EvidenciaControllerWeb;
 use App\Http\Controllers\Web\InformeControllerWeb;
 use App\Http\Controllers\Web\PageControllerWeb;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\BullyingDataController;
 use Illuminate\Support\Facades\Route;
+
 
 Route::get('/', [PageControllerWeb::class, 'welcome'])->name('welcome');
 
@@ -92,4 +94,25 @@ Route::get('/payment/paypal/cancel', [PaymentController::class, 'paypalCancel'])
 Route::middleware('auth:admin,guardia')->group(function () {
     Route::get('/subscriptions', [PaymentController::class, 'showSubscriptions'])->name('subscriptions.index');
     Route::get('/subscriptions/{subscription}', [PaymentController::class, 'showSubscription'])->name('subscriptions.show');
+});
+
+// Ruta pública para demostración del dashboard de bullying
+Route::get('/dashboard-demo', function () {
+    return view('guardia.dashboard');
+})->name('dashboard.demo');
+
+// Rutas API para datos de bullying (con autenticación)
+Route::middleware(['auth:admin,guardia,web'])->prefix('api/bullying')->group(function () {
+    Route::get('/kpis', [BullyingDataController::class, 'getKPIs'])->name('api.bullying.kpis');
+    Route::get('/incidents', [BullyingDataController::class, 'getIncidents'])->name('api.bullying.incidents');
+    Route::get('/chart/{type}', [BullyingDataController::class, 'getChartData'])->name('api.bullying.chart');
+    Route::post('/regenerate', [BullyingDataController::class, 'regenerateData'])->name('api.bullying.regenerate');
+});
+
+// Rutas API públicas para demostración del dashboard
+Route::prefix('api/bullying')->group(function () {
+    Route::get('/kpis', [BullyingDataController::class, 'getKPIs'])->name('api.bullying.kpis.public');
+    Route::get('/incidents', [BullyingDataController::class, 'getIncidents'])->name('api.bullying.incidents.public');
+    Route::get('/chart/{type}', [BullyingDataController::class, 'getChartData'])->name('api.bullying.chart.public');
+    Route::post('/regenerate', [BullyingDataController::class, 'regenerateData'])->name('api.bullying.regenerate.public');
 });
