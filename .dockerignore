@@ -1,0 +1,80 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+.docker/
+
+# Documentation
+README.md
+*.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Laravel
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+.env
+.env.backup
+.phpunit.result.cache
+artisan
+phpunit.xml
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/storage/logs/*
+
+# Testing
+/tests
+/coverage
+phpunit.xml
+.phpunit.result.cache
+
+# Build artifacts
+/public/build
+/public/mix-manifest.json
+
+# Temporary files
+*.tmp
+*.temp
+
+# Cache
+/bootstrap/cache/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+
+# Uploads
+/storage/app/public/*
+
+# Scripts
+start.sh
+wait-for-it.sh
+
+# Video files
+*.avi
+*.mp4
+*.mov
+*.wmv
+
+# Data files
+/public/data/
+/scripts/

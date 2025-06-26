@@ -4,75 +4,37 @@ services:
   app:
     build:
       context: .
-      dockerfile: .docker/php/Dockerfile
-    image: my-laravel-app:latest
-    container_name: app
-    restart: always
-    tty: true
-    environment:
-      SERVICE_NAME: app
-      SERVICE_TAGS: dev
-    working_dir: /var/www
-    volumes:
-      - ./:/var/www
-    networks:
-      - app-network
-    depends_on:
-      - db
-    command: sh -c "/usr/bin/wait-for-it.sh db:3306 --timeout=60 --strict && php artisan serve --host=0.0.0.0 --port=8000"
-
-  webserver:
-    image: nginx:alpine
-    container_name: webserver
-    restart: always
-    tty: true
+      dockerfile: Dockerfile
+    container_name: laravel-app
+    restart: unless-stopped
     ports:
-      - "8000:80"
-    volumes:
-      - ./:/var/www
-      - ./.docker/nginx:/etc/nginx/conf.d/
-    networks:
-      - app-network
+      - "8000:8000"
+    environment:
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=laravel_db
+      - DB_USERNAME=laravel_user
+      - DB_PASSWORD=laravel_password
     depends_on:
-      - app
+      - postgres
+    volumes:
+      - ./storage:/var/www/storage
+      - ./bootstrap/cache:/var/www/bootstrap/cache
 
-  db:
-    image: mysql:5.7.22
-    container_name: db
-    restart: always
-    tty: true
+  postgres:
+    image: postgres:15
+    container_name: laravel-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: laravel_db
+      POSTGRES_USER: laravel_user
+      POSTGRES_PASSWORD: laravel_password
     ports:
-      - "3306:3306"
-    environment:
-      MYSQL_DATABASE: acoso
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_PASSWORD: root
+      - "5432:5432"
     volumes:
-      - dbdata:/var/lib/mysql/
-    networks:
-      - app-network
-
-  migrate:
-    build:
-      context: .
-      dockerfile: .docker/php/Dockerfile
-    image: my-laravel-app:latest
-    container_name: migrate
-    depends_on:
-      - db
-    volumes:
-      - ./:/var/www
-    working_dir: /var/www
-    entrypoint: sh -c "/usr/bin/wait-for-it.sh db:3306 --timeout=60 --strict && php artisan migrate --force && php artisan db:seed --force"
-    networks:
-      - app-network
-    environment:
-      DB_HOST: db
-
-networks:
-  app-network:
-    driver: bridge
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
-  dbdata:
+  postgres_data:
     driver: local
