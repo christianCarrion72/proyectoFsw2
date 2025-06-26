@@ -18,6 +18,10 @@ use PayPal\Rest\ApiContext;
 use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Api\Amount;
 use PayPal\Api\Details;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SubscriptionExport;
+use App\Exports\SubscriptionsIndexExport;
 use PayPal\Api\Item;
 use PayPal\Api\ItemList;
 use PayPal\Api\Payer;
@@ -925,7 +929,15 @@ class PaymentController extends Controller
                             ->orderBy('created_at', 'desc')
                             ->paginate(10);
         
-        return view('subscriptions.index', compact('subscriptions'));
+        // Determinar el tipo de usuario para usar el layout correcto
+        $userType = 'admin'; // Por defecto
+        if (Auth::guard('guardia')->check()) {
+            $userType = 'guardia';
+        } elseif (Auth::guard('admin')->check()) {
+            $userType = 'admin';
+        }
+        
+        return view('subscriptions.index', compact('subscriptions', 'userType'));
     }
 
     /**
@@ -940,6 +952,100 @@ class PaymentController extends Controller
             abort(403, 'No autorizado');
         }
         
-        return view('subscriptions.show', compact('subscription'));
+        // Determinar el tipo de usuario para usar el layout correcto
+        $userType = 'admin'; // Por defecto
+        if (Auth::guard('guardia')->check()) {
+            $userType = 'guardia';
+        } elseif (Auth::guard('admin')->check()) {
+            $userType = 'admin';
+        }
+        
+        return view('subscriptions.show', compact('subscription', 'userType'));
+    }
+
+    /**
+     * Exportar suscripción a PDF
+     */
+    public function exportSubscriptionPdf(Subscription $subscription)
+    {
+        $user = $this->getAuthenticatedUser();
+        
+        // Verificar que la suscripción pertenece al usuario
+        if ($subscription->user_id !== $user->id) {
+            abort(403, 'No autorizado');
+        }
+        
+        $pdf = Pdf::loadView('subscriptions.pdf', compact('subscription'));
+         
+         return $pdf->download('suscripcion_' . $subscription->id . '.pdf');
+    }
+
+    /**
+     * Exportar suscripción a Excel
+     */
+    public function exportSubscriptionExcel(Subscription $subscription)
+    {
+        $user = $this->getAuthenticatedUser();
+        
+        // Verificar que la suscripción pertenece al usuario
+        if ($subscription->user_id !== $user->id) {
+            abort(403, 'No autorizado');
+        }
+        
+        return Excel::download(new SubscriptionExport($subscription), 'suscripcion_' . $subscription->id . '.xlsx');
+    }
+
+    /**
+     * Exportar índice de suscripciones a PDF con filtros de fecha
+     */
+    public function exportSubscriptionsIndexPdf(Request $request)
+    {
+        $user = $this->getAuthenticatedUser();
+        
+        if (!$user) {
+            return redirect()->route('payment.blocked')
+                ->with('error', 'Usuario no encontrado');
+        }
+
+        $startDate = $request->get('start_date');
+        $endDate = $request->get('end_date');
+
+        $query = $user->subscriptions()->orderBy('created_at', 'desc');
+
+        if ($startDate) {
+            $query->whereDate('payment_date', '>=', $startDate);
+        }
+
+        if ($endDate) {
+            $query->whereDate('payment_date', '<=', $endDate);
+        }
+
+        $subscriptions = $query->get();
+        
+        $pdf = Pdf::loadView('subscriptions.index-pdf', compact('subscriptions', 'startDate', 'endDate'));
+        
+        $filename = 'suscripciones_' . ($startDate ? $startDate . '_' : '') . ($endDate ? $endDate . '_' : '') . date('Y-m-d') . '.pdf';
+        
+        return $pdf->download($filename);
+    }
+
+    /**
+     * Exportar índice de suscripciones a Excel con filtros de fecha
+     */
+    public function exportSubscriptionsIndexExcel(Request $request)
+    {
+        $user = $this->getAuthenticatedUser();
+        
+        if (!$user) {
+            return redirect()->route('payment.blocked')
+                ->with('error', 'Usuario no encontrado');
+        }
+
+        $startDate = $request->get('start_date');
+        $endDate = $request->get('end_date');
+        
+        $filename = 'suscripciones_' . ($startDate ? $startDate . '_' : '') . ($endDate ? $endDate . '_' : '') . date('Y-m-d') . '.xlsx';
+        
+        return Excel::download(new SubscriptionsIndexExport($user->id, $startDate, $endDate), $filename);
     }
 }

@@ -1,4 +1,4 @@
-@extends('admin.layouts.template')
+@extends($userType === 'guardia' ? 'guardia.layouts.template' : 'admin.layouts.template')
 
 @section('title', 'Detalle de Suscripción #' . $subscription->id)
 
@@ -6,7 +6,7 @@
 <div class="container-fluid px-4">
     <h1 class="mt-4">Detalle de Suscripción #{{ $subscription->id }}</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ $userType === 'guardia' ? route('guardia.dashboard') : route('admin.dashboard') }}">Dashboard</a></li>
         <li class="breadcrumb-item"><a href="{{ route('subscriptions.index') }}">Suscripciones</a></li>
         <li class="breadcrumb-item active">Detalle #{{ $subscription->id }}</li>
     </ol>
@@ -216,6 +216,19 @@
                     <a href="{{ route('subscriptions.index') }}" class="btn btn-secondary w-100 mb-2">
                         <i class="fas fa-arrow-left"></i> Volver a la Lista
                     </a>
+                    
+                    <div class="row mb-2">
+                        <div class="col-6">
+                            <a href="{{ route('subscriptions.export.pdf', $subscription) }}" class="btn btn-danger w-100" target="_blank">
+                                <i class="fas fa-file-pdf"></i> Exportar PDF
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="{{ route('subscriptions.export.excel', $subscription) }}" class="btn btn-success w-100">
+                                <i class="fas fa-file-excel"></i> Exportar Excel
+                            </a>
+                        </div>
+                    </div>
                     
                     @if($subscription->status === 'completed' && $subscription->isExpired())
                         <a href="{{ route('payment.blocked') }}" class="btn btn-primary w-100">

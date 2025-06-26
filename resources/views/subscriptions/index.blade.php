@@ -1,4 +1,4 @@
-@extends('admin.layouts.template')
+@extends($userType === 'guardia' ? 'guardia.layouts.template' : 'admin.layouts.template')
 
 @section('title', 'Mis Suscripciones')
 
@@ -6,7 +6,7 @@
 <div class="container-fluid px-4">
     <h1 class="mt-4">Mis Suscripciones</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ $userType === 'guardia' ? route('guardia.dashboard') : route('admin.dashboard') }}">Dashboard</a></li>
         <li class="breadcrumb-item active">Suscripciones</li>
     </ol>
 
@@ -23,6 +23,39 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
+
+    <!-- Filtros y Exportación -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-filter me-1"></i>
+            Filtros y Exportación
+        </div>
+        <div class="card-body">
+            <form id="exportForm" class="row g-3">
+                <div class="col-md-4">
+                    <label for="start_date" class="form-label">Fecha Inicio</label>
+                    <input type="date" class="form-control" id="start_date" name="start_date">
+                </div>
+                <div class="col-md-4">
+                    <label for="end_date" class="form-label">Fecha Fin</label>
+                    <input type="date" class="form-control" id="end_date" name="end_date">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Exportar</label>
+                    <div class="d-grid gap-2">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-danger" onclick="exportToPdf()">
+                                <i class="fas fa-file-pdf"></i> PDF
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="exportToExcel()">
+                                <i class="fas fa-file-excel"></i> Excel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <div class="card mb-4">
         <div class="card-header">
@@ -223,5 +256,68 @@
     setTimeout(function() {
         $('.alert').fadeOut('slow');
     }, 5000);
+
+    // Función para exportar a PDF
+    function exportToPdf() {
+        const startDate = document.getElementById('start_date').value;
+        const endDate = document.getElementById('end_date').value;
+        
+        let url = '{{ route("subscriptions.index.export.pdf") }}';
+        let params = new URLSearchParams();
+        
+        if (startDate) {
+            params.append('start_date', startDate);
+        }
+        if (endDate) {
+            params.append('end_date', endDate);
+        }
+        
+        if (params.toString()) {
+            url += '?' + params.toString();
+        }
+        
+        window.open(url, '_blank');
+    }
+
+    // Función para exportar a Excel
+    function exportToExcel() {
+        const startDate = document.getElementById('start_date').value;
+        const endDate = document.getElementById('end_date').value;
+        
+        let url = '{{ route("subscriptions.index.export.excel") }}';
+        let params = new URLSearchParams();
+        
+        if (startDate) {
+            params.append('start_date', startDate);
+        }
+        if (endDate) {
+            params.append('end_date', endDate);
+        }
+        
+        if (params.toString()) {
+            url += '?' + params.toString();
+        }
+        
+        window.location.href = url;
+    }
+
+    // Validación de fechas
+    document.getElementById('start_date').addEventListener('change', function() {
+        const startDate = this.value;
+        const endDateInput = document.getElementById('end_date');
+        
+        if (startDate) {
+            endDateInput.min = startDate;
+        }
+    });
+
+    document.getElementById('end_date').addEventListener('change', function() {
+        const endDate = this.value;
+        const startDateInput = document.getElementById('start_date');
+        
+        if (endDate) {
+            startDateInput.max = endDate;
+        }
+    });
 </script>
 @endsection

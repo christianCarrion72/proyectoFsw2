@@ -93,7 +93,13 @@ Route::get('/payment/paypal/cancel', [PaymentController::class, 'paypalCancel'])
 // Rutas para suscripciones
 Route::middleware('auth:admin,guardia')->group(function () {
     Route::get('/subscriptions', [PaymentController::class, 'showSubscriptions'])->name('subscriptions.index');
+    // Rutas de exportación del índice (deben ir antes de las rutas con parámetros)
+    Route::get('/subscriptions/export/pdf', [PaymentController::class, 'exportSubscriptionsIndexPdf'])->name('subscriptions.index.export.pdf');
+    Route::get('/subscriptions/export/excel', [PaymentController::class, 'exportSubscriptionsIndexExcel'])->name('subscriptions.index.export.excel');
+    // Rutas con parámetros (deben ir después de las rutas específicas)
     Route::get('/subscriptions/{subscription}', [PaymentController::class, 'showSubscription'])->name('subscriptions.show');
+    Route::get('/subscriptions/{subscription}/pdf', [PaymentController::class, 'exportSubscriptionPdf'])->name('subscriptions.export.pdf');
+    Route::get('/subscriptions/{subscription}/excel', [PaymentController::class, 'exportSubscriptionExcel'])->name('subscriptions.export.excel');
 });
 
 // Ruta pública para demostración del dashboard de bullying
